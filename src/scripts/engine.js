@@ -58,24 +58,31 @@ async function getRandomCardId() {
     return cardData[randomIndex].id
 }
 
-async function createCardImage(randomIdCard, fieldSide) {
+async function createCardImage(IdCard, fieldSide) {
     const cardImage = document.createElement("img");
     cardImage.setAttribute("height", "100px")
     cardImage.setAttribute("src", "./src/assets/icons/card-back.png")
-    cardImage.setAttribute("data-id", randomIdCard)
+    cardImage.setAttribute("data-id", IdCard)
     cardImage.classList.add("card")
 
     if (fieldSide === playerSides.player1) {
+        
+        cardImage.addEventListener("mouseover", () => {
+            drawSelecCard(IdCard)
+        })
+
         cardImage.addEventListener("click", () => {
             setCardsField(cardImage.getAttribute("data-id"))
         })
     }
 
-    cardImage.addEventListener("mouseover", () => {
-        drawSelecCard(randomIdCard)
-    })
-
     return cardImage
+}
+
+async function drawSelecCard(index) {
+    state.cardSprites.avatar.src = cardData[index].img
+    state.cardSprites.name.innerText = cardData[index].name
+    state.cardSprites.type.innerText = "Atribute : " + cardData[index].type
 }
 
 function init() {
