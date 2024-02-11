@@ -99,6 +99,33 @@ async function setCardsField(cardId) {
     await drawButton(dualResults)
 }
 
+async function drawButton(text) {
+    state.actions.button.innerText = text
+    state.actions.button.style.display = "block"
+}
+
+async function updateScore() {
+    state.score.scoreBox.innerText = `Win: ${state.score.playerScore} | Lose: ${state.score.computerScore}`
+}
+
+async function checkDualResults(playerCardId, computerCardId) {
+    let dualResults = "Empate!"
+    let playerCard = cardData[playerCardId]
+
+    if (playerCard.WinOf.includes(computerCardId)) {
+        dualResults = "Ganhou!"
+        state.score.playerScore++
+    }
+
+    if (playerCard.LoseOf.includes(computerCardId)) {
+        dualResults = "Perdeu!"
+        state.score.computerScore++
+    }
+
+    return dualResults
+}
+
+
 async function removeAllCardsImages() {
     let { computerBOX, player1BOX } = state.playerSides
     let imgElements = computerBOX.querySelectorAll("img")
