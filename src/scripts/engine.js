@@ -14,15 +14,18 @@ const state = {
         player: document.getElementById("player-field-card"),
         computer: document.getElementById("computer-field-card"),
     },
+
+    playerSides: {
+        player1: "player-cards",
+        player1BOX: document.querySelector("#player-cards"),
+        computer: "computer-cards",
+        computerBOX: document.querySelector("#computer-cards"),
+    },
+
     actions: {
         button: document.getElementById("next-duel"),
     },
 };
-
-const playerSides = {
-    player1: "player-cards",
-    computer: "computer-cards",
-}
 
 const pathImages = "./src/assets/icons/"
 
@@ -65,7 +68,7 @@ async function createCardImage(IdCard, fieldSide) {
     cardImage.setAttribute("data-id", IdCard)
     cardImage.classList.add("card")
 
-    if (fieldSide === playerSides.player1) {
+    if (fieldSide === state.playerSides.player1) {
 
         cardImage.addEventListener("mouseover", () => {
             drawSelecCard(IdCard)
@@ -96,6 +99,15 @@ async function setCardsField(cardId) {
     await drawButton(dualResults)
 }
 
+async function removeAllCardsImages() {
+    let { computerBOX, player1BOX } = state.playerSides
+    let imgElements = computerBOX.querySelectorAll("img")
+    imgElements.forEach((img) => img.remove())
+
+    imgElements = player1BOX.querySelectorAll("img")
+    imgElements.forEach((img) => img.remove())
+}
+
 async function drawSelecCard(index) {
     state.cardSprites.avatar.src = cardData[index].img
     state.cardSprites.name.innerText = cardData[index].name
@@ -103,8 +115,8 @@ async function drawSelecCard(index) {
 }
 
 function init() {
-    drawCards(5, playerSides.player1)
-    drawCards(5, playerSides.computer)
+    drawCards(5, state.playerSides.player1)
+    drawCards(5, state.playerSides.computer)
 }
 
 async function drawCards(quantity, user) {
