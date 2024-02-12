@@ -109,16 +109,18 @@ async function updateScore() {
 }
 
 async function checkDualResults(playerCardId, computerCardId) {
-    let dualResults = "Empate!"
+    let dualResults = "DRAW"
     let playerCard = cardData[playerCardId]
 
     if (playerCard.WinOf.includes(computerCardId)) {
-        dualResults = "Ganhou!"
+        dualResults = "WIN"
+        await playAudio(dualResults)
         state.score.playerScore++
     }
 
     if (playerCard.LoseOf.includes(computerCardId)) {
-        dualResults = "Perdeu!"
+        dualResults = "LOSE"
+        await playAudio(dualResults)
         state.score.computerScore++
     }
 
@@ -142,8 +144,12 @@ async function drawSelecCard(index) {
 }
 
 function init() {
+    const bgm = document.getElementById("bgm")
+    bgm.play()
     drawCards(5, state.playerSides.player1)
     drawCards(5, state.playerSides.computer)
+
+    
 }
 
 async function drawCards(quantity, user) {
@@ -153,6 +159,23 @@ async function drawCards(quantity, user) {
         
         document.getElementById(user).appendChild(cardImage)
     }
+}
+
+async function playAudio(status){
+    const audio = new Audio(`./src/assets/audios/${status}.wav`)
+    audio.play()
+}
+
+async function resetDuel(){
+    state.cardSprites.avatar.src = ""
+    //state.cardSprites.name.innerText = "Select"
+    //state.cardSprites.type.innerHTML = "a card"
+    state.actions.button.style.display = "none"
+
+    state.fieldCards.player.style.display = "none"
+    state.fieldCards.computer.style.display = "none"
+
+    init()
 }
 
 init()
